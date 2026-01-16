@@ -8,152 +8,343 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏛️ Citadel Analytics Dashboard</h1>
-            <p class="subtitle">Demo Mode - Synthetic Data (Dec 25-27, 2024)</p>
-        </header>
-
-        <div class="stats-grid">
-            <!-- Key Metrics Cards -->
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <div class="stat-value" id="total-users">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Daily Active Users</h3>
-                <div class="stat-value" id="dau">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Sessions</h3>
-                <div class="stat-value" id="total-sessions">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Vibes</h3>
-                <div class="stat-value" id="total-vibes">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Matches</h3>
-                <div class="stat-value" id="total-matches">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Messages</h3>
-                <div class="stat-value" id="total-messages">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>MRR</h3>
-                <div class="stat-value" id="mrr">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Match Rate</h3>
-                <div class="stat-value" id="match-rate">-</div>
-            </div>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <div class="chart-container">
-                <h2>Daily Active Users</h2>
-                <canvas id="dau-chart"></canvas>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-title">Citadel</div>
+                        <div class="logo-subtitle">Analytics Dashboard</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="chart-container">
-                <h2>Sessions Over Time</h2>
-                <canvas id="sessions-chart"></canvas>
-            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span>Vibes & Matches</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M2 12h20"/>
+                    </svg>
+                    <span>Premium</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    <span>Growth</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9"/>
+                        <path d="M13 17V5"/>
+                        <path d="M8 17v-3"/>
+                    </svg>
+                    <span>Reports</span>
+                </a>
+            </nav>
 
-            <div class="chart-container">
-                <h2>Vibes Sent</h2>
-                <canvas id="vibes-chart"></canvas>
+            <div class="sidebar-footer">
+                <div class="demo-badge">Demo Mode</div>
+                <div class="date-range">Dec 25-27, 2024</div>
             </div>
+        </aside>
 
-            <div class="chart-container">
-                <h2>Matches Created</h2>
-                <canvas id="matches-chart"></canvas>
-            </div>
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h1>Dashboard Overview</h1>
+                    <span class="update-time">Last updated: <span id="update-time">2 min ago</span></span>
+                </div>
+                <div class="top-bar-right">
+                    <div class="search-box">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search metrics...">
+                    </div>
+                    <div class="date-filter">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span>Last 7 days</span>
+                    </div>
+                    <div class="user-avatar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                </div>
+            </header>
 
-            <div class="chart-container">
-                <h2>Messages Sent</h2>
-                <canvas id="messages-chart"></canvas>
-            </div>
+            <div class="dashboard-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon users-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Total Users</div>
+                            <div class="metric-value" id="total-users">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="users-change">+12.5%</span>
+                                <span class="metric-subtext">vs last month</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Activity Heatmap (by Hour)</h2>
-                <canvas id="activity-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon activity-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Daily Active</div>
+                            <div class="metric-value" id="dau">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="dau-change">+8.2%</span>
+                                <span class="metric-subtext">38.7% of total</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>User Journey Funnel</h2>
-                <canvas id="funnel-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon vibes-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Vibes Sent Today</div>
+                            <div class="metric-value" id="total-vibes">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="vibes-change">+24.1%</span>
+                                <span class="metric-subtext" id="vibes-per-user">3.25 per active user</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Gender Distribution</h2>
-                <canvas id="gender-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon match-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Match Rate</div>
+                            <div class="metric-value" id="match-rate">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="match-change">+2.8%</span>
+                                <span class="metric-subtext">vibes → matches</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Academic Year Distribution</h2>
-                <canvas id="academic-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon premium-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Premium Users</div>
+                            <div class="metric-value" id="premium-users">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="premium-change">+18.5%</span>
+                                <span class="metric-subtext">22.8% conversion</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Vibes by Adjective</h2>
-                <canvas id="adjectives-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon messages-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Messages Today</div>
+                            <div class="metric-value" id="messages-today">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="messages-change">+31.2%</span>
+                                <span class="metric-subtext" id="messages-per-user">5.9 per active user</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Conversation Depth Distribution</h2>
-                <canvas id="conversation-depth-chart"></canvas>
-            </div>
+                    <div class="metric-card">
+                        <div class="metric-icon response-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Response Rate</div>
+                            <div class="metric-value" id="response-rate">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="response-change">+4.1%</span>
+                                <span class="metric-subtext">messages replied</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="chart-container">
-                <h2>Premium vs Free Users</h2>
-                <canvas id="premium-chart"></canvas>
-            </div>
-        </div>
+                    <div class="metric-card">
+                        <div class="metric-icon growth-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 20V10"/>
+                                <path d="M12 20V4"/>
+                                <path d="M6 20v-6"/>
+                            </svg>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Weekly Growth</div>
+                            <div class="metric-value" id="weekly-growth">-</div>
+                            <div class="metric-footer">
+                                <span class="metric-change positive" id="growth-change">+1.2%</span>
+                                <span class="metric-subtext">new signups</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Detailed Metrics Tables -->
-        <div class="tables-section">
-            <div class="table-container">
-                <h2>Revenue Metrics</h2>
-                <table id="revenue-table">
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+                <div class="charts-row">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>Engagement Overview</h3>
+                            <div class="chart-legend">
+                                <span class="legend-item"><span class="legend-dot vibes"></span>Vibes</span>
+                                <span class="legend-item"><span class="legend-dot matches"></span>Matches</span>
+                                <span class="legend-item"><span class="legend-dot messages"></span>Messages</span>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="engagement-chart"></canvas>
+                        </div>
+                    </div>
 
-            <div class="table-container">
-                <h2>Session Metrics</h2>
-                <table id="session-table">
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>User Journey Funnel</h3>
+                            <p class="chart-subtitle">Signup to first message conversion</p>
+                        </div>
+                        <div class="chart-body">
+                            <div class="funnel-container" id="funnel-container"></div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="table-container">
-                <h2>Message Metrics</h2>
-                <table id="message-table">
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Daily Active Users</h3>
+                            <p class="chart-subtitle">Weekly vibes, matches, and messages</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="dau-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Session Activity</h3>
+                            <p class="chart-subtitle">Sessions over time</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="sessions-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Activity Heatmap</h3>
+                            <p class="chart-subtitle">Activity by hour of day</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="activity-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Vibes Distribution</h3>
+                            <p class="chart-subtitle">Top adjectives</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="adjectives-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Conversation Depth</h3>
+                            <p class="chart-subtitle">Messages per conversation</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="conversation-depth-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>User Demographics</h3>
+                            <p class="chart-subtitle">Gender and academic year</p>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="gender-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script src="/static/dashboard.js"></script>
