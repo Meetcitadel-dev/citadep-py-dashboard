@@ -231,9 +231,13 @@ class DataGenerator:
         # Track vibes created per day to ensure we hit targets
         vibes_created_by_date = defaultdict(int)
         
+        # Track pairs for reciprocal vibes (to ensure matches)
+        reciprocal_pairs = defaultdict(list)  # (date, user1_id, user2_id, adjective) -> list of vibe_ids
+        
         for date_str, target_vibes in DAILY_VIBES.items():
             date = datetime.strptime(date_str, '%Y-%m-%d').replace(tzinfo=IST_OFFSET)
             dau = DAILY_ACTIVE_USERS[date_str]
+            target_matches = DAILY_MATCHES.get(date_str, 0)
             
             # Get active users
             eligible_users = [u for u in self.users 
@@ -244,25 +248,82 @@ class DataGenerator:
             else:
                 active_users = eligible_users
             
+            # First, create reciprocal vibes to ensure matches
+            # We need target_matches * 2 vibes for matches (one each direction)
+            if len(active_users) >= 2 and target_matches > 0:
+                # Create enough reciprocal pairs to guarantee matches
+                reciprocal_vibes_needed = target_matches * 2
+                # But don't exceed available vibe budget
+                if reciprocal_vibes_needed > target_vibes:
+                    reciprocal_vibes_needed = target_vibes - (target_vibes % 2)  # Make it even
+                pairs_created = 0
+                
+                # Create exactly target_matches reciprocal pairs (each pair = 2 vibes)
+                for _ in range(target_matches):
+                    # Check if we have room for 2 more vibes
+                    if vibes_created_by_date[date_str] + 2 > target_vibes:
+                        break
+                    
+                    if len(active_users) < 2:
+                        break
+                    
+                    # Pick two different users
+                    user1, user2 = random.sample(active_users, 2)
+                    # Pick an adjective (use same adjective for both)
+                    adjective = adjective_pool[vibe_pool_idx]
+                    vibe_pool_idx = (vibe_pool_idx + 1) % len(adjective_pool)
+                    
+                    # Create vibe from user1 to user2
+                    hour = self._get_weighted_hour(ACTIVITY_PEAKS)
+                    minute = random.randint(0, 59)
+                    vibe1_time = date.replace(hour=hour, minute=minute, second=random.randint(0, 59))
+                    expires_at1 = vibe1_time + timedelta(hours=24)
+                    
+                    cursor.execute("""
+                        INSERT INTO vibes (vibe_id, sender_id, receiver_id, adjective, timestamp, expires_at)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (self.vibe_id_counter, user1['user_id'], user2['user_id'],
+                         adjective, vibe1_time.isoformat(), expires_at1.isoformat()))
+                    self.vibe_id_counter += 1
+                    vibes_created_by_date[date_str] += 1
+                    
+                    # Create reciprocal vibe from user2 to user1 (slightly later, same day)
+                    vibe2_time = vibe1_time + timedelta(minutes=random.randint(1, 30))
+                    # Ensure it's still on the same day
+                    if vibe2_time.date() != date.date():
+                        vibe2_time = date.replace(hour=23, minute=random.randint(0, 59), second=random.randint(0, 59))
+                    expires_at2 = vibe2_time + timedelta(hours=24)
+                    
+                    cursor.execute("""
+                        INSERT INTO vibes (vibe_id, sender_id, receiver_id, adjective, timestamp, expires_at)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """, (self.vibe_id_counter, user2['user_id'], user1['user_id'],
+                         adjective, vibe2_time.isoformat(), expires_at2.isoformat()))
+                    self.vibe_id_counter += 1
+                    vibes_created_by_date[date_str] += 1
+                    
+                    pairs_created += 1
+            
             # Premium users send 2.5x more vibes
             premium_users = [u for u in active_users if u['is_premium']]
             free_users = [u for u in active_users if not u['is_premium']]
             
-            # Distribute vibes: premium users get more
+            # Distribute remaining vibes: premium users get more
+            remaining_vibes = target_vibes - vibes_created_by_date[date_str]
             if len(premium_users) == 0:
                 premium_vibes = 0
-                free_vibes = target_vibes
+                free_vibes = remaining_vibes
             else:
                 total_weight = len(free_users) + len(premium_users) * 2.5
                 if total_weight > 0:
-                    premium_vibes = int(target_vibes * (len(premium_users) * 2.5 / total_weight))
-                    free_vibes = target_vibes - premium_vibes
+                    premium_vibes = int(remaining_vibes * (len(premium_users) * 2.5 / total_weight))
+                    free_vibes = remaining_vibes - premium_vibes
                 else:
                     premium_vibes = 0
-                    free_vibes = target_vibes
+                    free_vibes = remaining_vibes
             
             # Generate vibes from premium users
-            if len(premium_users) > 0:
+            if len(premium_users) > 0 and premium_vibes > 0:
                 premium_vibes_per_user = self._distribute_sessions(len(premium_users), premium_vibes)
                 for user, num_vibes in zip(premium_users, premium_vibes_per_user):
                     for _ in range(num_vibes):
@@ -273,9 +334,8 @@ class DataGenerator:
                         vibes_created_by_date[date_str] += 1
             
             # Generate vibes from free users
-            if len(free_users) > 0:
-                remaining_vibes = target_vibes - vibes_created_by_date[date_str]
-                free_vibes_per_user = self._distribute_sessions(len(free_users), remaining_vibes)
+            if len(free_users) > 0 and free_vibes > 0:
+                free_vibes_per_user = self._distribute_sessions(len(free_users), free_vibes)
                 for user, num_vibes in zip(free_users, free_vibes_per_user):
                     for _ in range(num_vibes):
                         if vibes_created_by_date[date_str] >= target_vibes:
@@ -317,12 +377,10 @@ class DataGenerator:
         cursor.execute("SELECT vibe_id, sender_id, receiver_id, adjective, timestamp FROM vibes ORDER BY timestamp")
         all_vibes = [dict(row) for row in cursor.fetchall()]
         
-        # Create a map of (sender_id, receiver_id, adjective) -> vibe
-        vibe_map = {}
+        # Create a map of (sender_id, receiver_id, adjective) -> list of vibes
+        vibe_map = defaultdict(list)
         for vibe in all_vibes:
             key = (vibe['sender_id'], vibe['receiver_id'], vibe['adjective'])
-            if key not in vibe_map:
-                vibe_map[key] = []
             vibe_map[key].append(vibe)
         
         # Track which vibes have been matched
@@ -354,7 +412,11 @@ class DataGenerator:
                         if vibe2['vibe_id'] in matched_vibes:
                             continue
                         
+                        if vibe2['vibe_id'] == vibe1['vibe_id']:
+                            continue
+                        
                         vibe2_time = datetime.fromisoformat(vibe2['timestamp'])
+                        # Both vibes should be on the same day
                         if not (date <= vibe2_time < date_end):
                             continue
                         
@@ -364,31 +426,33 @@ class DataGenerator:
                         )
                         match_time = max(match_time, vibe2_time + timedelta(minutes=1))
                         
-                        # Ensure match is within the same day
-                        if match_time.date() == date.date() or match_time.date() == date.date():
-                            expires_at = match_time + timedelta(hours=24)
-                            
-                            cursor.execute("""
-                                INSERT INTO matches 
-                                (match_id, user1_id, user2_id, vibe1_id, vibe2_id, 
-                                 adjective, created_timestamp, expires_at)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                            """, (
-                                self.match_id_counter,
-                                min(vibe1['sender_id'], vibe2['sender_id']),
-                                max(vibe1['sender_id'], vibe2['sender_id']),
-                                vibe1['vibe_id'],
-                                vibe2['vibe_id'],
-                                vibe1['adjective'],
-                                match_time.isoformat(),
-                                expires_at.isoformat()
-                            ))
-                            
-                            matched_vibes.add(vibe1['vibe_id'])
-                            matched_vibes.add(vibe2['vibe_id'])
-                            matches_created += 1
-                            self.match_id_counter += 1
-                            break
+                        # Ensure match time is within the date range
+                        if match_time >= date_end:
+                            match_time = date.replace(hour=23, minute=59, second=0)
+                        
+                        expires_at = match_time + timedelta(hours=24)
+                        
+                        cursor.execute("""
+                            INSERT INTO matches 
+                            (match_id, user1_id, user2_id, vibe1_id, vibe2_id, 
+                             adjective, created_timestamp, expires_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            self.match_id_counter,
+                            min(vibe1['sender_id'], vibe2['sender_id']),
+                            max(vibe1['sender_id'], vibe2['sender_id']),
+                            vibe1['vibe_id'],
+                            vibe2['vibe_id'],
+                            vibe1['adjective'],
+                            match_time.isoformat(),
+                            expires_at.isoformat()
+                        ))
+                        
+                        matched_vibes.add(vibe1['vibe_id'])
+                        matched_vibes.add(vibe2['vibe_id'])
+                        matches_created += 1
+                        self.match_id_counter += 1
+                        break
         
         self.db.get_connection().commit()
     

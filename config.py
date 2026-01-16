@@ -56,15 +56,15 @@ DAILY_VIBES = {
 }
 
 DAILY_MATCHES = {
-    '2024-12-25': 42,
-    '2024-12-26': 78,
-    '2024-12-27': 71
+    '2024-12-25': 6,
+    '2024-12-26': 10,
+    '2024-12-27': 6
 }
 
 DAILY_MESSAGES = {
-    '2024-12-25': 165,
-    '2024-12-26': 480,
-    '2024-12-27': 612
+    '2024-12-25': 45,
+    '2024-12-26': 120,
+    '2024-12-27': 85
 }
 
 PREMIUM_UPGRADES = {
@@ -102,26 +102,26 @@ ACTIVITY_PEAKS = [
 PREMIUM_PRICE_MONTHLY = 99  # ₹99
 PREMIUM_AVG_LIFETIME_MONTHS = 3
 
-# Conversation depth distribution
+# Conversation depth distribution (adjusted for fewer matches)
 CONVERSATION_DEPTH_DISTRIBUTION = {
-    (1, 5): 74,
-    (6, 15): 61,
-    (16, 30): 24,
-    (31, 100): 8  # Max 47 messages in deepest
+    (1, 5): 12,
+    (6, 15): 7,
+    (16, 30): 2,
+    (31, 100): 1  # Max 47 messages in deepest
 }
 
-# Message request stats
-TOTAL_MESSAGE_REQUESTS = 104
-MESSAGE_REQUESTS_ACCEPTED = 63
-MESSAGE_REQUESTS_DECLINED = 41
+# Message request stats (adjusted for fewer matches/conversations)
+TOTAL_MESSAGE_REQUESTS = 30
+MESSAGE_REQUESTS_ACCEPTED = 18
+MESSAGE_REQUESTS_DECLINED = 12
 
 # Funnel targets
 FUNNEL_TARGETS = {
     'signups': 100,
     'profile_complete': 100,
     'first_vibe_sent': 86,
-    'match_created': 54,
-    'first_message': 33
+    'match_created': 22,  # Updated to match new total
+    'first_message': 15  # Adjusted proportionally
 }
 
 # Averages

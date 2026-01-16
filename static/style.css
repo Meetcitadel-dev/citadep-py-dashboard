@@ -122,7 +122,7 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-.demo-badge {
+.date-range-display {
     background: rgba(125, 211, 192, 0.1);
     color: var(--accent-mint);
     padding: 8px 12px;
@@ -133,10 +133,11 @@ body {
     margin-bottom: 8px;
 }
 
-.date-range {
+.date-range-display {
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: 12px;
     text-align: center;
+    padding: 8px 12px;
 }
 
 .main-content {
@@ -175,49 +176,69 @@ body {
     gap: 16px;
 }
 
-.search-box {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 8px 14px;
-}
-
-.search-box svg {
-    color: var(--text-muted);
-}
-
-.search-box input {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 14px;
-    width: 180px;
-    outline: none;
-}
-
-.search-box input::placeholder {
-    color: var(--text-muted);
-}
-
 .date-filter {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 8px 14px;
     font-size: 14px;
     color: var(--text-secondary);
-    cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .date-filter:hover {
     border-color: var(--accent-mint);
+}
+
+.date-filter svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.date-filter input[type="date"] {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: var(--text-primary);
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.date-filter input[type="date"]:focus {
+    border-color: var(--accent-mint);
+}
+
+.date-filter input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
+}
+
+.date-filter span {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.apply-btn {
+    background: var(--accent-mint);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.apply-btn:hover {
+    background: var(--accent-teal);
+    transform: translateY(-1px);
 }
 
 .user-avatar {
@@ -283,7 +304,7 @@ body {
 .premium-icon { background: rgba(125, 211, 192, 0.15); color: var(--accent-mint); }
 .messages-icon { background: rgba(125, 211, 192, 0.15); color: var(--accent-mint); }
 .response-icon { background: rgba(125, 211, 192, 0.15); color: var(--accent-mint); }
-.growth-icon { background: rgba(125, 211, 192, 0.15); color: var(--accent-mint); }
+.sessions-icon { background: rgba(125, 211, 192, 0.15); color: var(--accent-mint); }
 
 .metric-content {
     flex: 1;
@@ -409,6 +430,12 @@ body {
     padding: 20px 0;
 }
 
+.funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .funnel-stage {
     display: flex;
     align-items: center;
@@ -438,13 +465,20 @@ body {
 .funnel-label {
     font-size: 14px;
     font-weight: 600;
-    color: var(--bg-primary);
+    color: #ffffff;
+    width: 140px;
+    flex-shrink: 0;
 }
 
 .funnel-value {
     font-size: 14px;
     font-weight: 700;
-    color: var(--bg-primary);
+    color: #ffffff;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
 }
 
 .funnel-percentage {
