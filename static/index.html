@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citadel Analytics Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏛️ Citadel Analytics Dashboard</h1>
+            <p class="subtitle">Demo Mode - Synthetic Data (Dec 25-27, 2024)</p>
+        </header>
+
+        <div class="stats-grid">
+            <!-- Key Metrics Cards -->
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="stat-value" id="total-users">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Daily Active Users</h3>
+                <div class="stat-value" id="dau">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Sessions</h3>
+                <div class="stat-value" id="total-sessions">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Vibes</h3>
+                <div class="stat-value" id="total-vibes">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Matches</h3>
+                <div class="stat-value" id="total-matches">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Messages</h3>
+                <div class="stat-value" id="total-messages">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>MRR</h3>
+                <div class="stat-value" id="mrr">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Match Rate</h3>
+                <div class="stat-value" id="match-rate">-</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <h2>Daily Active Users</h2>
+                <canvas id="dau-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Sessions Over Time</h2>
+                <canvas id="sessions-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Vibes Sent</h2>
+                <canvas id="vibes-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Matches Created</h2>
+                <canvas id="matches-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Messages Sent</h2>
+                <canvas id="messages-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Activity Heatmap (by Hour)</h2>
+                <canvas id="activity-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>User Journey Funnel</h2>
+                <canvas id="funnel-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Gender Distribution</h2>
+                <canvas id="gender-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Academic Year Distribution</h2>
+                <canvas id="academic-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Vibes by Adjective</h2>
+                <canvas id="adjectives-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Conversation Depth Distribution</h2>
+                <canvas id="conversation-depth-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>Premium vs Free Users</h2>
+                <canvas id="premium-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Detailed Metrics Tables -->
+        <div class="tables-section">
+            <div class="table-container">
+                <h2>Revenue Metrics</h2>
+                <table id="revenue-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>Session Metrics</h2>
+                <table id="session-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>Message Metrics</h2>
+                <table id="message-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
